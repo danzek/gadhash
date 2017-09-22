@@ -66,6 +66,12 @@ void readStdIn(const std::string& delimiter) {
  */
 void printVersion() {
     std::cout << "Google Analytics Domain Hash Calculator v0.2" << "\n";
+    std::cout << "Copyright (C) 2017 Dan O'Day <d@4n68r.com>\n\n";
+
+    std::cout << "This work is free. You can redistribute it and/or modify it under the\n" \
+                 "terms of the Do What The Fuck You Want To Public License, Version 2,\n" \
+                 "as published by Sam Hocevar. See the COPYING file in the gadhash\n" \
+                 "distribution for more details.\n\n";
 } // printVersion
 
 /*!
