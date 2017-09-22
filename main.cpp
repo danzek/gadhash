@@ -28,7 +28,7 @@
  * @param [in] domain Domain to calculate hash for
  * @return int representing Google Analytics domain hash or 0 if error
  */
-int hash(std::string domain)
+int hash(const std::string& domain)
 {
     int a = 1;
     int c = 0;
@@ -53,25 +53,36 @@ int hash(std::string domain)
     return a;
 }  // hash
 
-/*
+/*!
+ * Read from stdin
+ * @param [in] delimiter
+ */
+void readStdIn(const char& delimiter) {
+    std::cout << "Read from stdin using delimiter '" << delimiter << "'\n";  // debug only
+} // readStdIn
+
+/*!
  * Print version
  */
 void printVersion() {
     std::cout << "Google Analytics Domain Hash Calculator v0.2" << "\n";
 } // printVersion
 
-/*
+/*!
  * Print usage
  */
 void printUsage() {
-    std::cout << "When analyzing Google Analytics cookies, you will see an Urchin Tracking"  \
-                 "Module A (UTMA) value (utma=) in the URL. The part for comparison is only " \
-                 "the number before the first dot (\".\"). For instance, in \"utma=173272373.nnnnn...\", " \
-                 "the domain hash is 173272373 (\"google.com\", where n is any arbitrary number). " \
-                 "Enter the domain (without the protocol, i.e., don't include \"http://\", just use " \
+    std::cout << "When analyzing Google Analytics cookies, you will see an Urchin Tracking\n"  \
+                 "Module A (UTMA) value (utma=) in the URL. The part for comparison is only\n" \
+                 "the number before the first dot (\".\"). For instance, in \"utma=173272373.nnnnn...\",\n" \
+                 "the domain hash is 173272373 (\"google.com\", where n is any arbitrary number).\n" \
+                 "Enter the domain (without the protocol, i.e., don't include \"http://\", just use\n" \
                  "\"google.com\") and the domain hash will be calculated. A hash of 0 indicates an error.\n";
 }  // printUsage
 
+/*!
+ * main
+ */
 int main(int argc, const char* argv[]) {
     try {
         char delimiter = ',';
@@ -85,7 +96,7 @@ int main(int argc, const char* argv[]) {
                 ("delimiter,d", po::value<char>(&delimiter)->default_value(','),
                  "specify printable ASCII delimiter (comma/CSV by default)")
                 ("file,f", po::value<std::vector<std::string>>(&files),
-                 "file containing list of domains (one per line); gadhash reads stdin if no file " \
+                 "file(s) containing list of domains (one per line); gadhash reads stdin if no file(s) " \
                          "specified or a hyphen ('-') is given");
 
         po::positional_options_description posDesc;
@@ -96,6 +107,15 @@ int main(int argc, const char* argv[]) {
         try {
             po::store(po::command_line_parser(argc, argv).options(desc).positional(posDesc).run(), vm);
 
+            // version info
+            if (vm.count("version")) {
+                printVersion();
+                if (!vm.count("help")) {
+                    // only exit if help not also requested
+                    return EXIT_SUCCESS;
+                }
+            }
+
             // help option
             if (vm.count("help")) {
                 printUsage();
@@ -103,7 +123,7 @@ int main(int argc, const char* argv[]) {
                 return EXIT_SUCCESS;
             }
 
-            // call notify after help in case it finds error and throws exception
+            // call notify after version and help in case it finds error and throws exception
             po::notify(vm);
 
         } catch(po::error& e) {
@@ -113,25 +133,37 @@ int main(int argc, const char* argv[]) {
         }
 
         // handle args
-        if (vm.count("version")) {
-            printVersion();
-        }
-
-        if (delimiter != ',' && !isprint(delimiter)) {
+        if (delimiter != ',' && !isprint(delimiter) && delimiter != '\t') {
             // needs to be printable ASCII char
-            delimiter = ',';
+            std::cerr << "Delimiter must be printable ASCII character.\n";
+            return EXIT_FAILURE;
         }
 
-        // read domain(s)
+        // read domain(s) from file(s)
         if (!files.empty()) {
-            // read from file
-            for (std::string fn : files) {
-                std::cout << "file name: " << fn << '\n';  // debug only
+            for (std::string& fn : files) {
+                // handle if we encounter hyphen as file parameter
+                if (fn == "-") {
+                    if (files.size() > 1) {
+                        std::cerr << "ERROR: Mixture of file name(s) and stdin specified. " \
+                                     "Specify file name(s) OR stdin ('-').\n";
+                        return EXIT_FAILURE;
+
+                    } else {  // only one element in vector: '-' (read from stdin)
+                        readStdIn(delimiter);
+                        return EXIT_SUCCESS;
+                    }
+                }
+
+                // process domain(s) in file
+                std::cout << "file name: " << fn << "\tusing delimiter: '" << delimiter << "'\n";  // debug only
             }
-        } else {
-            // read from stdin
-            std::cout << "reading from stdin\n";  // debug only
+
+            return EXIT_SUCCESS;
         }
+
+        // read domain(s) from stdin (default behavior)
+        readStdIn(delimiter);
 
     } catch(std::exception& e) {
         std::cerr << "Unexpected error:\n" << e.what() << '\n'
@@ -140,6 +172,6 @@ int main(int argc, const char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    std::cout << std::endl;  // final buffer flush
+//    std::cout << std::endl;  // final buffer flush
     return EXIT_SUCCESS;
 }  // main
