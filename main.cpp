@@ -57,7 +57,7 @@ int hash(const std::string& domain)
  * Read from stdin
  * @param [in] delimiter
  */
-void readStdIn(const char& delimiter) {
+void readStdIn(const std::string& delimiter) {
     std::cout << "Read from stdin using delimiter '" << delimiter << "'\n";  // debug only
 } // readStdIn
 
@@ -85,7 +85,7 @@ void printUsage() {
  */
 int main(int argc, const char* argv[]) {
     try {
-        char delimiter = ',';
+        std::string delimiter = ",";
         std::vector<std::string> files;
         namespace po = boost::program_options;
 
@@ -93,8 +93,8 @@ int main(int argc, const char* argv[]) {
         desc.add_options()
                 ("help,h", "get usage help")
                 ("version,v", "display version")
-                ("delimiter,d", po::value<char>(&delimiter)->default_value(','),
-                 "specify printable ASCII delimiter (comma/CSV by default)")
+                ("delimiter,d", po::value<std::string>(&delimiter)->default_value(","),
+                 "specify delimiter string (comma/CSV by default; can be multiple characters)")
                 ("file,f", po::value<std::vector<std::string>>(&files),
                  "file(s) containing list of domains (one per line); gadhash reads stdin if no file(s) " \
                          "specified or a hyphen ('-') is given");
@@ -123,19 +123,12 @@ int main(int argc, const char* argv[]) {
                 return EXIT_SUCCESS;
             }
 
-            // call notify after version and help in case it finds error and throws exception
+            // call notify after displaying version and/or help in case it finds error and throws exception
             po::notify(vm);
 
         } catch(po::error& e) {
             std::cerr << "ERROR: " << e.what() << '\n';
             std::cerr << desc << '\n';
-            return EXIT_FAILURE;
-        }
-
-        // handle args
-        if (delimiter != ',' && !isprint(delimiter) && delimiter != '\t') {
-            // needs to be printable ASCII char
-            std::cerr << "Delimiter must be printable ASCII character.\n";
             return EXIT_FAILURE;
         }
 
