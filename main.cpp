@@ -158,7 +158,7 @@ int main(int argc, const char* argv[]) {
         // boost literal-escapes all user input (which is secure, but in this case I want a tab char)
         if (delimiter == "\\t") {
             delimiter = "\t";
-        } else if (delimiter == "\\n") {  // I suppose someone could want newline delimiter for some reason (consider)
+        } else if (delimiter == "\\n") {  // I suppose someone could want a newline delimiter for some reason (consider)
             delimiter = "\n";
         }
 
