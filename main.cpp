@@ -58,6 +58,10 @@ int hash(const std::string& domain)
  * @param [in] delimiter
  */
 void readStdIn(const std::string& delimiter) {
+    // improves performance
+    // see https://stackoverflow.com/a/9371717/8652014
+    std::ios_base::sync_with_stdio(false);  // experiment if this needs to be at top of main or not, or do it different
+
     std::cout << "Read from stdin using delimiter '" << delimiter << "'\n";  // debug only
 } // readStdIn
 
@@ -138,6 +142,13 @@ int main(int argc, const char* argv[]) {
             return EXIT_FAILURE;
         }
 
+        // boost literal-escapes all user input (which is secure, but in this case I want a tab char)
+        if (delimiter == "\\t") {
+            delimiter = "\t";
+        } else if (delimiter == "\\n") {  // I suppose someone could want a newline delimiter for some reason (consider)
+            delimiter = "\n";
+        }
+
         // read domain(s) from file(s)
         if (!files.empty()) {
             for (std::string& fn : files) {
@@ -159,13 +170,6 @@ int main(int argc, const char* argv[]) {
             }
 
             return EXIT_SUCCESS;
-        }
-
-        // boost literal-escapes all user input (which is secure, but in this case I want a tab char)
-        if (delimiter == "\\t") {
-            delimiter = "\t";
-        } else if (delimiter == "\\n") {  // I suppose someone could want a newline delimiter for some reason (consider)
-            delimiter = "\n";
         }
 
         // read domain(s) from stdin (default behavior)
