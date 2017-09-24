@@ -93,7 +93,7 @@ void iterateLines(std::istream& input, const std::string& delimiter, std::ostrin
  */
 void readStdIn(const std::string& delimiter) {
     // allegedly improves performance, see https://stackoverflow.com/a/9371717/8652014
-    std::ios_base::sync_with_stdio(false);  // todo: experiment if this needs to be at top of main or not
+    std::ios_base::sync_with_stdio(false);
 
     // instantiate output stringstream and stream header row
     std::ostringstream output;
