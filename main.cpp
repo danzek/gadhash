@@ -17,10 +17,27 @@
  * (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#include "boost/program_options.hpp"
-#include "boost/filesystem.hpp"
-
+#include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/iostreams/device/mapped_file.hpp>
 #include <iostream>
+#include <algorithm>
+#include <string>
+#include <sstream>
+#include <exception>
+
+
+// using method from https://stackoverflow.com/a/1567703/8652014
+class line {
+    std::string data;
+public:
+    friend std::istream &operator>>(std::istream &is, line &l) {
+        std::getline(is, l.data);
+        return is;
+    }
+    operator std::string() const { return data; }
+};  // line
+
 
 /*!
  * Calculate Google Analytics domain hash
@@ -53,17 +70,48 @@ int hash(const std::string& domain)
     return a;
 }  // hash
 
+
+/*!
+ * Generate output line/row (domain, delimiter, hash)
+ *
+ * @param [in] delimiter delimiter to use for results output
+ * @param domain line containing domain
+ * @return
+ */
+std::string generateHashedRow(const std::string& delimiter, const std::string& domain) {
+    // based on function from https://stackoverflow.com/a/1567703/8652014
+    return domain + delimiter + std::to_string(hash(domain)) + "\n";  // todo: make sure newline char is not hashed
+}  // generateHashedRow
+
+
+/*!
+ * Transform file contents containing domains into string of hashed results
+ *
+ * @param [in] delimiter delimiter to use for results output
+ * @param [in] fileContents string containing list of domains separated by newlines
+ * @param [out] output final output of transform operation (hashed domains list)
+ */
+void hashFileContents(const std::string& delimiter, const std::string& fileContents, std::ostringstream& output) {
+    std::istringstream input(fileContents);
+    std::transform(std::istream_iterator<line>(input),
+                   std::istream_iterator<line>(),
+                   std::ostream_iterator<std::string>(output, "\n"),
+                   generateHashedRow);
+}  // hashFileContents
+
+
 /*!
  * Read from stdin
- * @param [in] delimiter
+ *
+ * @param [in] delimiter delimiter to use for results output
  */
 void readStdIn(const std::string& delimiter) {
-    // improves performance
-    // see https://stackoverflow.com/a/9371717/8652014
+    // allegedly improves performance, see https://stackoverflow.com/a/9371717/8652014
     std::ios_base::sync_with_stdio(false);  // experiment if this needs to be at top of main or not, or do it different
 
     std::cout << "Read from stdin using delimiter '" << delimiter << "'\n";  // debug only
 } // readStdIn
+
 
 /*!
  * Print version
@@ -89,6 +137,7 @@ void printUsage() {
                  "Enter the domain (without the protocol, i.e., don't include \"http://\", just use\n" \
                  "\"google.com\") and the domain hash will be calculated. A hash of 0 indicates an error.\n";
 }  // printUsage
+
 
 /*!
  * main
@@ -167,6 +216,16 @@ int main(int argc, const char* argv[]) {
 
                 // process domain(s) in file
                 std::cout << "file name: " << fn << "\tusing delimiter: '" << delimiter << "'\n";  // debug only
+
+                // memory map file for speed, files should be small enough to fit in RAM
+                boost::iostreams::mapped_file_source f(fn);
+                std::string fileContents(f.data(), f.size());
+                f.close();
+
+                // hash domains and output delimited results
+                std::ostringstream results;
+                hashFileContents(delimiter, fileContents, results);
+                std::cout << results.str();
             }
 
             return EXIT_SUCCESS;

@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(SOURCE_FILES main.cpp)
 
 # Boost: see https://cmake.org/cmake/help/latest/module/FindBoost.html
-find_package(Boost 1.61.0 REQUIRED COMPONENTS filesystem program_options)
+find_package(Boost 1.61.0 REQUIRED COMPONENTS filesystem program_options iostreams)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     add_executable(gadhash ${SOURCE_FILES})
