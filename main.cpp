@@ -72,15 +72,36 @@ void outputRow(const std::string& delimiter, const std::string& inputRow, std::o
 
 
 /*!
+ * Iterate over lines in istream input and stream results to output
+ * @param input
+ * @param delimiter
+ * @param output
+ */
+void iterateLines(std::istream& input, const std::string& delimiter, std::ostringstream& output) {
+    // iterate over file contents and stream parsed delimited results to output
+    for (std::string line; std::getline(input, line); ) {
+        outputRow(delimiter, line, output);
+    }
+}  // iterateLines
+
+
+/*!
  * Read from stdin
  *
  * @param [in] delimiter delimiter to use for results output
  */
 void readStdIn(const std::string& delimiter) {
     // allegedly improves performance, see https://stackoverflow.com/a/9371717/8652014
-    std::ios_base::sync_with_stdio(false);  // experiment if this needs to be at top of main or not, or do it different
+    std::ios_base::sync_with_stdio(false);  // experiment if this needs to be at top of main or not
 
-    std::cout << "Read from stdin using delimiter '" << delimiter << "'\n";  // debug only
+    // instantiate output stringstream and stream header row
+    std::ostringstream output;
+    output << "domain" << delimiter << "hash\n";
+
+    iterateLines(std::cin, delimiter, output);
+
+    // stream final output to stdout
+    std::cout << output.str();
 } // readStdIn
 
 
@@ -194,11 +215,9 @@ int main(int argc, const char* argv[]) {
                 std::string fileContents(f.data(), f.size());
                 f.close();
 
-                // iterate over file contents and stream parsed delimited results to output
+                // iterate over lines and generate output
                 std::istringstream input(fileContents);
-                for (std::string line; std::getline(input, line); ) {
-                    outputRow(delimiter, line, output);
-                }
+                iterateLines(input, delimiter, output);
             }
 
             // stream final output to stdout
