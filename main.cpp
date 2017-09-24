@@ -21,22 +21,9 @@
 #include <boost/filesystem.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <iostream>
-#include <algorithm>
 #include <string>
 #include <sstream>
 #include <exception>
-
-
-// using method from https://stackoverflow.com/a/1567703/8652014
-class line {
-    std::string data;
-public:
-    friend std::istream &operator>>(std::istream &is, line &l) {
-        std::getline(is, l.data);
-        return is;
-    }
-    operator std::string() const { return data; }
-};  // line
 
 
 /*!
@@ -72,32 +59,16 @@ int hash(const std::string& domain)
 
 
 /*!
- * Generate output line/row (domain, delimiter, hash)
+ * Stream formatted output row given input row reference
  *
  * @param [in] delimiter delimiter to use for results output
- * @param domain line containing domain
- * @return
+ * @param [in] inputRow row from input stream containing domain
+ * @param [out] output ostringstream to where output line + newline will be streamed
  */
-std::string generateHashedRow(const std::string& delimiter, const std::string& domain) {
-    // based on function from https://stackoverflow.com/a/1567703/8652014
-    return domain + delimiter + std::to_string(hash(domain)) + "\n";  // todo: make sure newline char is not hashed
-}  // generateHashedRow
-
-
-/*!
- * Transform file contents containing domains into string of hashed results
- *
- * @param [in] delimiter delimiter to use for results output
- * @param [in] fileContents string containing list of domains separated by newlines
- * @param [out] output final output of transform operation (hashed domains list)
- */
-void hashFileContents(const std::string& delimiter, const std::string& fileContents, std::ostringstream& output) {
-    std::istringstream input(fileContents);
-    std::transform(std::istream_iterator<line>(input),
-                   std::istream_iterator<line>(),
-                   std::ostream_iterator<std::string>(output, "\n"),
-                   generateHashedRow);
-}  // hashFileContents
+void outputRow(const std::string& delimiter, const std::string& inputRow, std::ostringstream& output) {
+    // todo: test to ensure newline char isn't being hashed from input row
+    output << inputRow << delimiter << std::to_string(hash(inputRow)) << "\n";
+}  // outputRow
 
 
 /*!
@@ -200,6 +171,10 @@ int main(int argc, const char* argv[]) {
 
         // read domain(s) from file(s)
         if (!files.empty()) {
+            // instantiate output stringstream and stream header row
+            std::ostringstream output;
+            output << "domain" << delimiter << "hash\n";
+
             for (std::string& fn : files) {
                 // handle if we encounter hyphen as file parameter
                 if (fn == "-") {
@@ -214,19 +189,20 @@ int main(int argc, const char* argv[]) {
                     }
                 }
 
-                // process domain(s) in file
-                std::cout << "file name: " << fn << "\tusing delimiter: '" << delimiter << "'\n";  // debug only
-
                 // memory map file for speed, files should be small enough to fit in RAM
                 boost::iostreams::mapped_file_source f(fn);
                 std::string fileContents(f.data(), f.size());
                 f.close();
 
-                // hash domains and output delimited results
-                std::ostringstream results;
-                hashFileContents(delimiter, fileContents, results);
-                std::cout << results.str();
+                // iterate over file contents and stream parsed delimited results to output
+                std::istringstream input(fileContents);
+                for (std::string line; std::getline(input, line); ) {
+                    outputRow(delimiter, line, output);
+                }
             }
+
+            // stream final output to stdout
+            std::cout << output.str();
 
             return EXIT_SUCCESS;
         }
