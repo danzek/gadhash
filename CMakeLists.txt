@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.8)
 project(gadhash)
 
 set(CMAKE_CXX_STANDARD 11)
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES src/main.cpp)
 
 # Boost: see https://cmake.org/cmake/help/latest/module/FindBoost.html
 find_package(Boost 1.61.0 REQUIRED COMPONENTS program_options iostreams)
