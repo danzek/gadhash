@@ -148,7 +148,7 @@ int main(int argc, const char* argv[]) {
                 ("help,h", "get usage help")
                 ("version,v", "display version")
                 ("delimiter,d", po::value<std::string>(&delimiter)->default_value(","),
-                 "specify delimiter string (comma/CSV by default; can be multiple characters)")
+                 "specify output delimiter string (comma/CSV by default; can be multiple characters)")
                 ("file,f", po::value<std::vector<std::string>>(&files),
                  "file(s) containing list of domains (one per line); gadhash reads stdin if no file(s) " \
                          "specified or a hyphen ('-') is given");

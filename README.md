@@ -58,8 +58,8 @@ gadhash expects a file (or `stdin`) containing a list of domains separated by ne
     Options:
       -h [ --help ]               get usage help
       -v [ --version ]            display version
-      -d [ --delimiter ] arg (=,) specify delimiter string (comma/CSV by default;
-                                  can be multiple characters)
+      -d [ --delimiter ] arg (=,) specify output delimiter string (comma/CSV by
+                                  default; can be multiple characters)
       -f [ --file ] arg           file(s) containing list of domains (one per
                                   line); gadhash reads stdin if no file(s)
                                   specified or a hyphen ('-') is given
