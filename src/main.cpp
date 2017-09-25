@@ -68,7 +68,6 @@ int hash(const std::string& domain)
  * @param [out] output ostringstream to where output line + newline will be streamed
  */
 void outputRow(const std::string& delimiter, const std::string& inputRow, std::ostringstream& output) {
-    // todo: test to ensure newline char isn't being hashed from input row
     output << inputRow << delimiter << std::to_string(hash(inputRow)) << "\n";
 }  // outputRow
 
