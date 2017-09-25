@@ -20,9 +20,6 @@
 #include <boost/program_options.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <iostream>
-#include <string>
-#include <sstream>
-#include <exception>
 
 
 /*!
