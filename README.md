@@ -49,6 +49,8 @@ This will generate a Makefile which you can then use to build the software:
 
 This should result in a compiled binary being created for your system. You can also run `make install` if you choose to after this.
 
+Alternatively, you can just run `cmake --build [/path/to/CMakeLists.txt]` and it should build regardless of the build system on your platform (especially useful if it doesn't support `make`).
+
 ## Usage
 
 gadhash expects a file (or `stdin`) containing a list of domains separated by newlines (`\n`; *not* `\r`&mdash;be sure to use UNIX/LF line endings).
