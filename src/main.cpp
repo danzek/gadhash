@@ -234,8 +234,7 @@ int main(int argc, const char* argv[]) {
 
     } catch(std::exception& e) {
         std::cerr << "Unexpected error:\n" << e.what() << '\n'
-                  << "If you're feeling helpful, email this error to Dan at d@4n68r.com and tell him what you tried.\n"
-                  << "Or... you could just gripe and do nothing.";
+                  << "If you're feeling helpful, email this error to Dan at d@4n68r.com and tell him what you tried.\n";
         return EXIT_FAILURE;
     }
 
