@@ -16,7 +16,7 @@ Calculates Google Analytics domain hash given domain(s).
 
 When analyzing Google Analytics cookies, you will see an Urchin Tracking Module A (UTMA) value (utma=) in the URL. The part for comparison is only the number before the first dot ("."). For instance, in "utma=173272373.nnnnn...", the domain hash is 173272373 ("google.com", where n is any arbitrary number).
 
-:warning: Enter only the domain (without the protocol, e.g., "`http://`") so that the domain hash will be calculated correctly. A hash value of 0 indicates an error.
+Enter only the domain (without the protocol, i.e. don't include "`http://`") so that the domain hash will be calculated correctly. A hash value of 0 indicates an error.
 
 :warning: This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) nor alternate line endings (CR, i.e. `\r`) to support Windows. **I only intended for this to work on Linux.** That said, feel free to fork this code and make it support whatever you want it to!
 
