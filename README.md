@@ -5,6 +5,9 @@ Calculates Google Analytics domain hash given domain(s).
 ### Contents
 
  - [Overview](#overview)
+ - [Building](#building)
+   - [Dependencies](#dependencies)
+   - [CMake](#cmake)
  - [Usage](#usage)
  - [Contributing](#contributing)
  - [License, Disclaimers, etc.](#license-disclaimers-etc)
@@ -19,11 +22,38 @@ When analyzing Google Analytics cookies, you will see an Urchin Tracking Module 
 
 This is a C++ CLI related to [the Windows GUI C# version I wrote previously](https://github.com/danzek/google-analytics-domain-hash-calculator).
 
+## Building
+
+`gadhash` has a single `main.cpp` file that contains all of the application code. As such, you can build the application using any compiler you are comfortable with that has C++11 support. CMake has been used to remain compiler-independent.
+
+### Dependencies
+
+The following **Boost 1.61.0 libraries** are ***required*** dependencies for `gadhash`:
+
+ - Boost.Program_options
+ - Boost.Iostreams
+
+ See [the Boost documentation for getting started on *nix.](http://www.boost.org/doc/libs/1_61_0/more/getting_started/unix-variants.html) (there is also [instructions for Windows](http://www.boost.org/doc/libs/1_61_0/more/getting_started/windows.html) but note that `gadhash` intentionally targets Linux platforms&mdash;I also wrote [a Windows GUI version](https://github.com/danzek/google-analytics-domain-hash-calculator), though, FYI).
+
+### CMake
+
+[Install CMake](https://cmake.org/install/) 3.8 or higher (if you don't already have it). This is a fairly new version so it may not be available in some package repositories. I recommend [downloading it from cmake.org](http://cmake.org/download/) and [following their installation instructions](https://cmake.org/install/).
+
+Once you have CMake installed, you can generate a Makefile for your platform by invoking `cmake` and providing the path to the `CMakeLists.txt` file at the root of this repository. For example:
+
+    cmake ~/Documents/gadhash/CMakeLists.txt
+
+This will generate a Makefile which you can then use to build the software:
+
+    make
+
+This should result in a compiled binary being created for your system. You can also run `make install` if you choose to after this.
+
 ## Usage
 
 gadhash expects a file (or `stdin`) containing a list of domains separated by newlines (`\n`; *not* `\r`&mdash;be sure to use UNIX/LF line endings).
 
-    gadhash [OPTIONS] [FILE(s)]
+    gadhash [OPTION(s)] [FILE(s)]
 
     Options:
       -h [ --help ]               get usage help
