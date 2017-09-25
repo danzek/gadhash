@@ -10,9 +10,9 @@ When analyzing Google Analytics cookies, you will see an Urchin Tracking Module 
 
 :warning: Enter only the domain (without the protocol, e.g., "`http://`") so that the domain hash will be calculated correctly. A hash value of 0 indicates an error.
 
-This is a C++ CLI of [the Windows GUI C# version I wrote previously](https://github.com/danzek/google-analytics-domain-hash-calculator).
+:warning: This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) nor alternate line endings (CR, i.e. `\r`) to support Windows. **I only intended for this to work on Linux.** That said, feel free to fork this code and make it support whatever you want it to!
 
-This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) to support Windows. I only intend for this to work on Linux.
+This is a C++ CLI related to [the Windows GUI C# version I wrote previously](https://github.com/danzek/google-analytics-domain-hash-calculator).
 
 Usage
 -----
@@ -35,7 +35,7 @@ If no options or file names are specified, gadhash will read from `stdin`.
 Contributing
 ------------
 
-I welcome contributions. Contact me at d@4n68r.com, create and issue, and/or fork this code and create a pull request.
+I welcome contributions. Contact me at d@4n68r.com, create an issue, and/or fork this code and create a pull request.
 
 License, Disclaimers, etc.
 --------------------------
@@ -43,6 +43,8 @@ License, Disclaimers, etc.
 Copyright &copy; 2017 Dan O'Day (d@4n68r.com)
 
 This work is free. You can redistribute it and/or modify it under the terms of the Do What The Fuck You Want To Public License, Version 2, as published by Sam Hocevar. See the COPYING file for more details.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 This project uses the `Boost` libraries for CLI argument parsing and memory-mapping files. Boost is distributed under the Boost Software License, Version 1.0 (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt).
 
