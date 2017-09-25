@@ -18,8 +18,6 @@ When analyzing Google Analytics cookies, you will see an Urchin Tracking Module 
 
 Enter only the domain (without the protocol, i.e. don't include "`http://`") so that the domain hash will be calculated correctly. A hash value of 0 indicates an error.
 
-:warning: This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) nor alternate line endings (CR, i.e. `\r`) to support Windows. **I only intended for this to work on Linux.** That said, feel free to fork this code and make it support whatever you want it to!
-
 This is a C++ CLI related to [the Windows GUI C# version I wrote previously](https://github.com/danzek/google-analytics-domain-hash-calculator).
 
 ## Building
@@ -67,6 +65,8 @@ gadhash expects a file (or `stdin`) containing a list of domains separated by ne
                                   specified or a hyphen ('-') is given
 
 If no options or file names are specified, gadhash will read from `stdin`.
+
+:warning: This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) nor alternate line endings (CR, i.e. `\r`) to support Windows. **I only intended for this to work on Linux.** That said, feel free to fork this code and make it support whatever you want it to!
 
 ## Contributing
 
