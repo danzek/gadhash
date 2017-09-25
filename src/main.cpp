@@ -18,7 +18,6 @@
  */
 
 #include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <iostream>
 #include <string>
