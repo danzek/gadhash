@@ -1,10 +1,15 @@
-`gadhash`: Google Analytics Domain Hash Calculator
-==================================================
+# `gadhash`: Google Analytics Domain Hash Calculator
 
 Calculates Google Analytics domain hash given domain(s).
 
-Overview
---------
+### Contents
+
+ - [Overview](#overview)
+ - [Usage](#usage)
+ - [Contributing](#contributing)
+ - [License, Disclaimers, etc.](#license-disclaimers-etc)
+
+## Overview
 
 When analyzing Google Analytics cookies, you will see an Urchin Tracking Module A (UTMA) value (utma=) in the URL. The part for comparison is only the number before the first dot ("."). For instance, in "utma=173272373.nnnnn...", the domain hash is 173272373 ("google.com", where n is any arbitrary number).
 
@@ -14,8 +19,7 @@ When analyzing Google Analytics cookies, you will see an Urchin Tracking Module 
 
 This is a C++ CLI related to [the Windows GUI C# version I wrote previously](https://github.com/danzek/google-analytics-domain-hash-calculator).
 
-Usage
------
+## Usage
 
 gadhash expects a file (or `stdin`) containing a list of domains separated by newlines (`\n`; *not* `\r`&mdash;be sure to use UNIX/LF line endings).
 
@@ -32,13 +36,11 @@ gadhash expects a file (or `stdin`) containing a list of domains separated by ne
 
 If no options or file names are specified, gadhash will read from `stdin`.
 
-Contributing
-------------
+## Contributing
 
 I welcome contributions. Contact me at d@4n68r.com, create an issue, and/or fork this code and create a pull request.
 
-License, Disclaimers, etc.
---------------------------
+## License, Disclaimers, etc.
 
 Copyright &copy; 2017 Dan O'Day (d@4n68r.com)
 
