@@ -66,7 +66,7 @@ gadhash expects a file (or `stdin`) containing a list of domains separated by ne
 
 If no options or file names are specified, gadhash will read from `stdin`.
 
-:warning: This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) nor alternate line endings (CR, i.e. `\r`) to support Windows. **I only intended for this to work on Linux.** That said, feel free to fork this code and make it support whatever you want it to!
+:warning: This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) nor alternate line endings (CR, i.e. `\r`) to support Windows. **I only intended for this to work on Linux.** That said, feel free to fork this code and make it support whatever you want it to! Keep in mind I already wrote [a Windows GUI version of this tool](https://github.com/danzek/google-analytics-domain-hash-calculator) (if there is interest, I can make that one support file input containing a list of domains, too).
 
 ## Contributing
 
