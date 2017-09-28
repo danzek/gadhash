@@ -63,8 +63,8 @@ int hash(const std::string& domain)
 /*!
  * Iterate over lines in istream input and stream parsed results to output
  *
- * @param input input stream containing list of domains to parse
- * @param delimiter delimiter to use for results output
+ * @param [in] input input stream containing list of domains to parse
+ * @param [in] delimiter delimiter to use for results output
  * @param [out] output output stringstream containing final parsed data for all domains
  */
 void iterateLines(std::istream& input, const std::string& delimiter, std::ostringstream& output) {
