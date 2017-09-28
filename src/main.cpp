@@ -61,18 +61,6 @@ int hash(const std::string& domain)
 
 
 /*!
- * Stream formatted output row given input row reference
- *
- * @param [in] delimiter delimiter to use for results output
- * @param [in] inputRow row from input stream containing domain
- * @param [out] output ostringstream to where output line + newline will be streamed
- */
-void outputRow(const std::string& delimiter, const std::string& inputRow, std::ostringstream& output) {
-    output << inputRow << delimiter << std::to_string(hash(inputRow)) << "\n";
-}  // outputRow
-
-
-/*!
  * Iterate over lines in istream input and stream parsed results to output
  *
  * @param input input stream containing list of domains to parse
@@ -82,7 +70,7 @@ void outputRow(const std::string& delimiter, const std::string& inputRow, std::o
 void iterateLines(std::istream& input, const std::string& delimiter, std::ostringstream& output) {
     // iterate over file contents and stream parsed delimited results to output
     for (std::string line; std::getline(input, line); ) {
-        outputRow(delimiter, line, output);
+        output << line << delimiter << std::to_string(hash(line)) << "\n";
     }
 }  // iterateLines
 
