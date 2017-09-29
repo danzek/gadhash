@@ -9,6 +9,7 @@ Calculates Google Analytics domain hash given domain(s).
    - [Dependencies](#dependencies)
    - [CMake](#cmake)
  - [Usage](#usage)
+ - [Rainbow Tables](#rainbow-tables)
  - [Contributing](#contributing)
  - [License, Disclaimers, etc.](#license-disclaimers-etc)
 
@@ -67,6 +68,10 @@ gadhash expects a file (or `stdin`) containing a list of domains separated by ne
 If no options or file names are specified, gadhash will read from `stdin`.
 
 :warning: This uses `std::string` and assumes UTF-8 (POSIX)&mdash;I made no attempt to deal with wide characters (neither `std::wstring` nor `wchar_t`) nor alternate line endings (CR, i.e. `\r`) to support Windows. **I only intended for this to work on Linux.** That said, feel free to fork this code and make it support whatever you want it to! Keep in mind I already wrote [a Windows GUI version of this tool](https://github.com/danzek/google-analytics-domain-hash-calculator) (if there is interest, I can make that one support file input containing a list of domains, too).
+
+## Rainbow Tables
+
+["Rainbow tables" of hashed domains have been made available](https://github.com/danzek/gadhash/tree/master/rainbowtbl) using `gadhash` to compute the Google Analytics (GA) domain hashes. This will enable interested parties to query a domain hash to find the corresponding domain.
 
 ## Contributing
 
